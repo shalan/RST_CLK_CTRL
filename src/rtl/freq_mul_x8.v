@@ -8,8 +8,10 @@
   Author: Mohamed Shalan (mshalan@aucegypt.edu)
 */
 
-`timescale          1ns/1ps
-`default_nettype 	none
+`timescale              1ns/1ps
+`default_nettype        none
+
+`define                 HS_LIB      
 
 module freq_mul_x8(
     input   wire        clk_ref,
@@ -23,6 +25,7 @@ module freq_mul_x8(
 
     parameter CTR_WIDTH = 10;
 
+    (* keep *)
     wire    clk_int;
 
 `ifdef RTL_SIM
@@ -126,6 +129,7 @@ module rosc_1ghz (
 
 	assign chain_0[0] = fb_in;
 
+`ifdef HS_LIB
 	(* keep *) sky130_fd_sc_hs__clkinv_2	INV_CHAIN_2_0 ( .A(fb_in), .Y(chain_2[1]));
 	(* keep *) sky130_fd_sc_hs__clkinv_2	INV_CHAIN_2_1 ( .A(chain_2[1]), .Y(chain_2[2]));
 
@@ -140,7 +144,6 @@ module rosc_1ghz (
 	(* keep *) sky130_fd_sc_hs__clkinv_2	INV_CHAIN_6_3 ( .A(chain_6[3]), .Y(chain_6[4]));
 	(* keep *) sky130_fd_sc_hs__clkinv_2	INV_CHAIN_6_4 ( .A(chain_6[4]), .Y(chain_6[5]));
 	(* keep *) sky130_fd_sc_hs__clkinv_2	INV_CHAIN_6_5 ( .A(chain_6[5]), .Y(chain_6[6]));
-	
 	
 	(* keep *) sky130_fd_sc_hs__mux4_2 MUX (
 		.A0(chain_0[0]), 
@@ -158,6 +161,41 @@ module rosc_1ghz (
 	(* keep *) sky130_fd_sc_hs__nand2_4 ENABLE ( .A(en), .B(inv_out[1]), .Y(fb_out) );
 
 	(* keep *) sky130_fd_sc_hs__clkbuf_8 BUF (	.A(fb_out),	.X(clk)	);
+    
+`else
+    (* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_2_0 ( .A(fb_in), .Y(chain_2[1]));
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_2_1 ( .A(chain_2[1]), .Y(chain_2[2]));
+
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_4_0 ( .A(fb_in), .Y(chain_4[1]));
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_4_1 ( .A(chain_4[1]), .Y(chain_4[2]));
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_4_2 ( .A(chain_4[2]), .Y(chain_4[3]));
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_4_3 ( .A(chain_4[3]), .Y(chain_4[4]));
 	
-endmodule
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_6_0 ( .A(fb_in), .Y(chain_6[1]));
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_6_1 ( .A(chain_6[1]), .Y(chain_6[2]));
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_6_2 ( .A(chain_6[2]), .Y(chain_6[3]));
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_6_3 ( .A(chain_6[3]), .Y(chain_6[4]));
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_6_4 ( .A(chain_6[4]), .Y(chain_6[5]));
+	(* keep *) sky130_fd_sc_hd__clkinv_2	INV_CHAIN_6_5 ( .A(chain_6[5]), .Y(chain_6[6]));
+	
+	(* keep *) sky130_fd_sc_hd__mux4_2 MUX (
+		.A0(chain_0[0]), 
+		.A1(chain_2[2]), 
+		.A2(chain_4[4]), 
+		.A3(chain_6[6]), 
+		.S0(trim[0]), 
+		.S1(trim[1]), 
+		.X(mux_out)
+	);
+			
+	(* keep *) sky130_fd_sc_hd__clkinv_4 	INV_0 ( .A(mux_out), 	.Y(inv_out[0]) );
+	(* keep *) sky130_fd_sc_hd__clkinv_4	INV_1 ( .A(inv_out[0]), .Y(inv_out[1]) );
+	
+	(* keep *) sky130_fd_sc_hd__nand2_8 ENABLE ( .A(en), .B(inv_out[1]), .Y(fb_out) );
+
+	(* keep *) sky130_fd_sc_hd__clkbuf_8 BUF (	.A(fb_out),	.X(clk)	);
 `endif
+
+endmodule
+
+`endif 
