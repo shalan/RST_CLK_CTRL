@@ -35,15 +35,19 @@ module por_rosc #(parameter LENGTH=16) (
     wire [7:1]  dly;
     wire        clk_128mhz;
 
-    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    DLYINV_0 ( .A(fb_in), .Y(dly[1]) );
-    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    DLYINV_1 ( .A(dly[1]), .Y(dly[2]) );
-    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    DLYINV_2 ( .A(dly[2]), .Y(dly[3]) );
-    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    DLYINV_3 ( .A(dly[3]), .Y(dly[4]) );
-    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    DLYINV_4 ( .A(dly[4]), .Y(dly[5]) );
-    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd2_1    DLYINV_5 ( .A(dly[5]), .Y(dly[6]) );
-    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd2_1    DLYINV_6 ( .A(dly[6]), .Y(dly[7]) );
-    (* keep *) sky130_fd_sc_hs__clkbuf_8           CLKBUF_0 ( .A(dly[7]), .X(fb_out) );
-    (* keep *) sky130_fd_sc_hs__clkbuf_4           CLKBUF_1 ( .A(fb_out), .X(clk_128mhz) );
+    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    ROSC_DLYINV_0 ( .A(fb_in), .Y(dly[1]) );
+    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    ROSC_DLYINV_1 ( .A(dly[1]), .Y(dly[2]) );
+
+    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    ROSC_DLYINV_2 ( .A(dly[2]), .Y(dly[3]) );
+    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    ROSC_DLYINV_3 ( .A(dly[3]), .Y(dly[4]) );
+
+    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    ROSC_DLYINV_4 ( .A(dly[4]), .Y(dly[5]) );
+    (* keep *) sky130_fd_sc_hs__clkdlyinv5sd3_1    ROSC_DLYINV_5 ( .A(dly[5]), .Y(dly[6]) );
+    
+    (* keep *) sky130_fd_sc_hs__clkinv_8           ROSC_DLYINV_6 ( .A(dly[6]), .Y(dly[7]) );
+
+    (* keep *) sky130_fd_sc_hs__clkbuf_8           ROSC_CLKBUF_0 ( .A(dly[7]), .X(fb_out) );
+    (* keep *) sky130_fd_sc_hs__clkbuf_8           ROSC_CLKBUF_1 ( .A(fb_out), .X(clk_128mhz) );
 
 `endif
     // Clock Divider
@@ -55,6 +59,7 @@ module por_rosc #(parameter LENGTH=16) (
     
     assign      clk_8mhz   = clk_div[4];
 
+    (* keep *)
     always @(posedge clk_128mhz)
         clk_div <= clk_div + 1'b1;
     
