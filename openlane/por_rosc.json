@@ -1,10 +1,10 @@
 {
     "DESIGN_NAME": "por_rosc",
     "VERILOG_FILES": "dir::repo/RST_CLK_CTRL/src/rtl/*.v",
-    "FP_CORE_UTIL": 50,
+    "FP_CORE_UTIL": 45,
     "FP_ASPECT_RATIO": 0.6,
     "FP_PDN_CORE_RING": true,
-    "PL_TARGET_DENSITY": 0.65,
+    "PL_TARGET_DENSITY": 0.60,
     "FP_PIN_ORDER_CFG": "dir::repo/RST_CLK_CTRL/openlane/por_rosc_pins.cfg",
     "STD_CELL_LIBRARY": "sky130_fd_sc_hs",
     "STD_CELL_LIBRARY_OPT": "sky130_fd_sc_hs",
