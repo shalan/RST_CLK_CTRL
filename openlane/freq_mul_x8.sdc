@@ -6,7 +6,7 @@ current_design freq_mul_x8
 ###############################################################################
 # Timing Constraints
 ###############################################################################
-create_clock -name __VIRTUAL_CLK__ -period 0.60 
+create_clock -name __VIRTUAL_CLK__ -period 0.70 
 set_input_delay 0.0000 -clock [get_clocks {__VIRTUAL_CLK__}] -add_delay [get_ports {fb_in}]
 set_output_delay 0.0000 -clock [get_clocks {__VIRTUAL_CLK__}] -add_delay [get_ports {fb_out}]
 set_input_delay 0.0000 -clock [get_clocks {__VIRTUAL_CLK__}] -add_delay [get_ports {en}]
@@ -16,7 +16,7 @@ set_input_delay 0.0000 -clock [get_clocks {__VIRTUAL_CLK__}] -add_delay [get_por
 set_false_path -from [get_ports {rst_n}]
 set_false_path -from [get_ports {clk_ref}]
 
-create_clock -name CLK -period 0.90 [get_pins {rosc.BUF/A}]
+create_clock -name CLK -period 1.25 [get_pins {rosc.BUF/A}]
 #[get_ports fb_out]
 set_clock_uncertainty 0.100 CLK 
 
