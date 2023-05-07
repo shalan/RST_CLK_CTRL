@@ -42,16 +42,17 @@ module freq_mul_x8(
         .trim(trim)
     );
 `endif
-    // clk_ref synchronizer
-    reg [1:0] clk_ref_sync_ff;
-    wire clk_ref_sync = clk_ref_sync_ff[1];
+    // s-stage clk_ref synchronizer
+    reg [2:0]   clk_ref_sync_ff;
+    wire        clk_ref_sync = clk_ref_sync_ff[2];
     
     always@(posedge clk_int) 
-      clk_ref_sync_ff <= {clk_ref_sync_ff[0], clk_ref};
+      clk_ref_sync_ff <= {clk_ref_sync_ff[1:0], clk_ref};
       
     // clk_ref posedge detector
-    reg clk_ref_sync_dly;
-    wire clk_ref_sync_posedge;
+    reg         clk_ref_sync_dly;
+    (* keep *)
+    wire        clk_ref_sync_posedge;
     
     always@(posedge clk_int)
       clk_ref_sync_dly <= clk_ref_sync;
@@ -78,7 +79,9 @@ module freq_mul_x8(
     // clk_out half cycle counter
     reg [5:0]   half_cyc_cntr;
     reg [3:0]   clk_out_half_cntr;
+    (* keep *)
     wire        half_cyc_cntr_ld;
+    (* keep *)
     wire        clk_out_toggle;
     wire        half_cyc_cntr_one = (half_cyc_cntr == 6'd1);
     wire        half_cyc_cntr_zero = (half_cyc_cntr == 6'd0);
