@@ -1,6 +1,7 @@
 {
     "DESIGN_NAME": "freq_mul_x8",
     "VERILOG_FILES": "dir::repo/RST_CLK_CTRL/src/rtl/*.v",
+    "NO_SYNTH_CELL_LIST": "dir::repo/RST_CLK_CTRL/openlane/cells.list"
     "RUN_VERILATOR": 0,
     "FP_CORE_UTIL": 45,
     "FP_ASPECT_RATIO": 0.6,
@@ -10,7 +11,7 @@
     "STD_CELL_LIBRARY": "sky130_fd_sc_hs",
     "STD_CELL_LIBRARY_OPT": "sky130_fd_sc_hs",
     "SYNTH_CAP_LOAD": 50,
-    "SYNTH_STRATEGY":"DELAY 1",
+    "SYNTH_STRATEGY":"DELAY 0",
     "CLOCK_PORT": "fb_out",
     "CLOCK_PERIOD": 0.9,
     "BASE_SDC_FILE": "dir::repo/RST_CLK_CTRL/openlane/freq_mul_x8.sdc",
