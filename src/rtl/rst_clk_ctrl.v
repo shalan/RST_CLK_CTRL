@@ -2,15 +2,15 @@
     Author: Mohamed Shalan (mshalan@aucegypt.edu)
 */
 
-`timescale          1ns/1ps
-`default_nettype    none
+`timescale              1ns/1ps
+`default_nettype        none
 
 module rst_clk_ctrl(
     input   wire        clk_ref,
     input   wire        xrst_n,
     input   wire        pll_en,
     input   wire        sel_8mhz,
-    //input   wire        sel_8x,
+    input   wire        sel_xclk,
     input   wire        sel_pll,
     input   wire [1:0]  sel_rosc,
     input 	wire [1:0] 	pll_trim,
@@ -64,10 +64,12 @@ module rst_clk_ctrl(
     // Clock Multiplexors
     wire    clk_mux0;
     wire    clk_mux1;
+    wire    clk_mux2;
+    
     
     clkmux_2x1 CLKMUX0 (
         .rst_n(por_n),
-        .clk1(clk_mux1), 
+        .clk1(clk_mux2), 
         .clk2(clk_8mhz), 
         .sel(sel_8mhz),
         .clko(clk_mux0)
@@ -79,6 +81,14 @@ module rst_clk_ctrl(
         .clk2(clk_pll), 
         .sel(sel_pll),
         .clko(clk_mux1)
+    );
+
+    clkmux_2x1 CLKMUX2 (
+        .rst_n(por_n),
+        .clk1(clk_mux1), 
+        .clk2(clk_ref), 
+        .sel(sel_xclk),
+        .clko(clk_mux2)
     );
 
     // Clock Divider
